@@ -109,102 +109,162 @@
 
         /* 3. 详情页大标题增强 */
         #det-name { font-size: 5.5rem !important; }
+    
+        /* Contact modal */
+        #contact-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(15, 23, 42, 0.38);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        #contact-modal.active { display: flex; }
+        .contact-modal-card {
+            width: min(760px, 94vw);
+            background: rgba(255,255,255,0.98);
+            border-radius: 24px;
+            box-shadow: 0 24px 70px rgba(15,23,42,0.20);
+            padding: 34px;
+            position: relative;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+        .contact-person-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 22px;
+            background: #f8fafc;
+        }
+        .contact-email {
+            color: #618AA1;
+            font-weight: 700;
+            text-decoration: none;
+            overflow-wrap: anywhere;
+        }
+        .contact-email:hover { text-decoration: underline; }
+        .contact-close {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+        }
+        @media (max-width: 700px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .contact-modal-card { padding: 26px 20px; }
+        }
+
     </style>
     <script>
         const inflationForecastData = {
-            "Australia": { "sep": 3.06, "oct": 3.16 },
-            "Afghanistan": { "sep": -3.11, "oct": -2.22 },
-            "Canada": { "sep": 1.88, "oct": 2.8 },
-            "Chile": { "sep": 2.96, "oct": 2.91 },
-            "Germany": { "sep": 1.44, "oct": 2.8 },
-            "Italy": { "sep": 2.07, "oct": 2.38 },
-            "Nigeria": { "sep": 29.39, "oct": 27.26 },
-            "Uganda": { "sep": 0.59, "oct": 2.24 },
-            "Ukraine": { "sep": 14.25, "oct": 15.16 },
-            "Uzbekistan": { "sep": 2.1, "oct": 2.49 },
-            "Azerbaijan": { "sep": 5.18, "oct": 5.96 },
-            "Austria": { "sep": 2.06, "oct": 2.6 },
-            "Bahrain": { "sep": -1.56, "oct": -0.79 },
-            "Bangladesh": { "sep": 10.71, "oct": 9.25 },
-            "Barbados": { "sep": 0.91, "oct": 1.25 },
-            "Belarus": { "sep": 5.62, "oct": 5.91 },
-            "Belgium": { "sep": 2.43, "oct": 2.44 },
-            "Belize": { "sep": 2.22, "oct": 2.46 },
-            "Brazil": { "sep": 7.26, "oct": 6.97 },
-            "Bulgaria": { "sep": 4.42, "oct": 4.58 },
-            "Burkina Faso": { "sep": 0.0, "oct": 0.0 },
-            "Burundi": { "sep": 38.98, "oct": 38.67 },
-            "Cambodia": { "sep": 7.83, "oct": 6.57 },
-            "Cameroon": { "sep": 7.9, "oct": 7.27 },
-            "Chad": { "sep": 4.68, "oct": 4.0 },
-            "China": { "sep": 0.47, "oct": -3.23 },
-            "Colombia": { "sep": 4.49, "oct": 4.56 },
-            "Costa Rica": { "sep": 6.05, "oct": 6.75 },
-            "Croatia": { "sep": 5.09, "oct": 5.12 },
-            "Cyprus": { "sep": 4.81, "oct": 2.25 },
-            "Czech Republic": { "sep": 4.78, "oct": 4.44 },
-            "Denmark": { "sep": 4.41, "oct": 5.69 },
-            "Djibouti": { "sep": -3.73, "oct": -2.57 },
-            "Dominican Republic": { "sep": 3.12, "oct": 3.8 },
-            "Ecuador": { "sep": 0.19, "oct": -0.11 },
-            "Egypt": { "sep": 20.8, "oct": 3.74 },
-            "El Salvador": { "sep": -0.5, "oct": -0.55 },
-            "Ethiopia": { "sep": 15.8, "oct": 14.6 },
-            "Fiji": { "sep": 8.47, "oct": 0.13 },
-            "France": { "sep": 0.11, "oct": 0.35 },
-            "Georgia": { "sep": 3.02, "oct": 3.66 },
-            "Ghana": { "sep": 28.3, "oct": 28.1 },
-            "Greece": { "sep": 0.13, "oct": 0.18 },
-            "Guatemala": { "sep": 3.48, "oct": 3.17 },
-            "Guinea": { "sep": 12.28, "oct": 9.51 },
-            "Guyana": { "sep": 2.14, "oct": 2.08 },
-            "Honduras": { "sep": 2.43, "oct": 3.25 },
-            "India": { "sep": 5.68, "oct": 3.84 },
-            "Iraq": { "sep": 1.4, "oct": 1.02 },
-            "Israel": { "sep": 4.75, "oct": 3.48 },
-            "Jamaica": { "sep": 7.43, "oct": 6.57 },
-            "Japan": { "sep": 7.75, "oct": 7.62 },
-            "Kazakhstan": { "sep": 5.51, "oct": 6.23 },
-            "Kenya": { "sep": 5.7, "oct": 6.01 },
-            "Kuwait": { "sep": 5.19, "oct": 5.23 },
-            "Malaysia": { "sep": 2.94, "oct": 2.67 },
-            "Maldives": { "sep": 7.37, "oct": 6.3 },
-            "Mali": { "sep": 8.17, "oct": 8.11 },
-            "Malta": { "sep": 1.36, "oct": 2.38 },
-            "Mauritius": { "sep": 1.87, "oct": -4.86 },
-            "Mexico": { "sep": 2.65, "oct": 4.09 },
-            "Mozambique": { "sep": 12.04, "oct": 11.89 },
-            "Myanmar": { "sep": 0.0, "oct": 0.0 },
-            "Netherlands": { "sep": 3.53, "oct": 4.32 },
-            "New Zealand": { "sep": 2.04, "oct": 2.28 },
-            "Norway": { "sep": 4.96, "oct": 7.49 },
-            "Nicaragua": { "sep": 0.0, "oct": 0.0 },
-            "Oman": { "sep": 0.88, "oct": 0.0 },
-            "Paraguay": { "sep": 4.37, "oct": 4.9 },
-            "Peru": { "sep": 0.13, "oct": -0.16 },
-            "Poland": { "sep": 5.42, "oct": 6.17 },
-            "Portugal": { "sep": 1.44, "oct": 1.55 },
-            "Romania": { "sep": 4.54, "oct": 4.5 },
-            "Russia": { "sep": 11.35, "oct": 11.8 },
-            "Saudi Arabia": { "sep": 0.8, "oct": 1.02 },
-            "Serbia": { "sep": 4.1, "oct": 4.28 },
-            "Solomon Islands": { "sep": 1.37, "oct": -0.99 },
-            "Somalia": { "sep": 0.0, "oct": 0.0 },
-            "South Africa": { "sep": 2.61, "oct": 3.03 },
-            "Spain": { "sep": 1.82, "oct": 2.18 },
-            "Sweden": { "sep": 2.17, "oct": 3.91 },
-            "Switzerland": { "sep": -1.05, "oct": -0.62 },
-            "Tajikistan": { "sep": 3.51, "oct": 3.53 },
-            "Tanzania": { "sep": 5.34, "oct": 4.96 },
-            "Thailand": { "sep": 0.93, "oct": 1.18 },
-            "Togo": { "sep": 9.01, "oct": 6.8 },
-            "Tunisia": { "sep": 7.1, "oct": 6.95 },
-            "United Arab Emirates": { "sep": 0.88, "oct": 0.2 },
-            "United Kingdom": { "sep": 3.34, "oct": 3.33 },
-            "United States": { "sep": 0.0, "oct": 0.0 },
-            "Uruguay": { "sep": 4.28, "oct": 3.85 },
-            "Vietnam": { "sep": 4.42, "oct": 3.1 },
-            "Zambia": { "sep": 19.19, "oct": 20.44 }
+            "Australia": { "jan": 3.97, "janMae": 0.1956, "feb": 4.00, "febMae": 0.3797 },
+            "Afghanistan": { "jan": 7.29, "janMae": 2.1682, "feb": 7.55, "febMae": 3.7646 },
+            "Canada": { "jan": 4.61, "janMae": 0.6514, "feb": 4.35, "febMae": 1.0804 },
+            "Chile": { "jan": 4.40, "janMae": 1.2980, "feb": 4.45, "febMae": 1.8771 },
+            "Germany": { "jan": 1.47, "janMae": 1.0215, "feb": 1.48, "febMae": 1.6960 },
+            "Italy": { "jan": 2.00, "janMae": 0.7628, "feb": 1.97, "febMae": 1.2761 },
+            "Nigeria": { "jan": 11.35, "janMae": 1.5319, "feb": 9.82, "febMae": 2.5049 },
+            "Uganda": { "jan": 5.69, "janMae": 1.0798, "feb": 5.88, "febMae": 1.8465 },
+            "Ukraine": { "jan": 14.80, "janMae": 1.4638, "feb": 14.46, "febMae": 2.7071 },
+            "Uzbekistan": { "jan": 5.69, "janMae": 0.6580, "feb": 5.63, "febMae": 1.0344 },
+            "Azerbaijan": { "jan": 6.04, "janMae": 0.9509, "feb": 6.22, "febMae": 1.4929 },
+            "Austria": { "jan": 3.38, "janMae": 0.9254, "feb": 3.31, "febMae": 1.3463 },
+            "Bahrain": { "jan": 0.65, "janMae": 2.5135, "feb": 1.05, "febMae": 3.0776 },
+            "Bangladesh": { "jan": 7.32, "janMae": 0.8436, "feb": 7.31, "febMae": 1.1183 },
+            "Barbados": { "jan": 1.95, "janMae": 2.0892, "feb": 2.22, "febMae": 3.2182 },
+            "Belarus": { "jan": 8.89, "janMae": 1.3274, "feb": 8.44, "febMae": 2.2533 },
+            "Belgium": { "jan": 2.61, "janMae": 0.7542, "feb": 2.58, "febMae": 1.3169 },
+            "Belize": { "jan": -0.56, "janMae": 1.0214, "feb": -0.71, "febMae": 1.4250 },
+            "Brazil": { "jan": 2.26, "janMae": 0.7792, "feb": 2.47, "febMae": 1.3309 },
+            "Bulgaria": { "jan": 5.20, "janMae": 0.9171, "feb": 5.01, "febMae": 1.8407 },
+            "Burkina Faso": { "jan": -3.33, "janMae": 2.4064, "feb": -2.78, "febMae": 3.6778 },
+            "Burundi": { "jan": 7.73, "janMae": 2.9477, "feb": 8.15, "febMae": 5.1076 },
+            "Cambodia": { "jan": 3.15, "janMae": 0.9005, "feb": 3.01, "febMae": 1.3278 },
+            "Cameroon": { "jan": 6.42, "janMae": 1.5086, "feb": 6.02, "febMae": 1.9448 },
+            "Chad": { "jan": -8.90, "janMae": 2.5695, "feb": -7.84, "febMae": 3.3801 },
+            "China": { "jan": -4.56, "janMae": 1.9626, "feb": -3.95, "febMae": 2.4604 },
+            "Colombia": { "jan": 5.34, "janMae": 1.3770, "feb": 5.32, "febMae": 2.2339 },
+            "Costa Rica": { "jan": -2.88, "janMae": 1.3437, "feb": -2.57, "febMae": 2.2591 },
+            "Croatia": { "jan": 0.33, "janMae": 0.9629, "feb": 0.50, "febMae": 1.7160 },
+            "Cyprus": { "jan": -2.16, "janMae": 2.0353, "feb": -1.31, "febMae": 2.7235 },
+            "Czech Republic": { "jan": 0.90, "janMae": 1.7853, "feb": 1.08, "febMae": 2.6973 },
+            "Denmark": { "jan": 3.11, "janMae": 0.8733, "feb": 3.03, "febMae": 1.4440 },
+            "Djibouti": { "jan": -1.02, "janMae": 2.4221, "feb": -0.82, "febMae": 2.7958 },
+            "Dominican Republic": { "jan": 8.91, "janMae": 0.8063, "feb": 8.90, "febMae": 1.3493 },
+            "Ecuador": { "jan": 1.04, "janMae": 0.9446, "feb": 1.30, "febMae": 1.3313 },
+            "Egypt": { "jan": 15.52, "janMae": 3.5117, "feb": 15.65, "febMae": 5.6699 },
+            "El Salvador": { "jan": 0.83, "janMae": 0.8188, "feb": 1.04, "febMae": 1.5081 },
+            "Ethiopia": { "jan": 10.74, "janMae": 2.2388, "feb": 11.20, "febMae": 3.0513 },
+            "Fiji": { "jan": -0.75, "janMae": 2.4960, "feb": 0.25, "febMae": 2.9267 },
+            "France": { "jan": 1.74, "janMae": 0.7515, "feb": 1.69, "febMae": 1.2996 },
+            "Georgia": { "jan": 8.36, "janMae": 1.6827, "feb": 8.12, "febMae": 2.8340 },
+            "Ghana": { "jan": 1.44, "janMae": 3.0954, "feb": 1.82, "febMae": 5.2872 },
+            "Greece": { "jan": 3.75, "janMae": 0.9541, "feb": 3.58, "febMae": 1.5869 },
+            "Guatemala": { "jan": 0.25, "janMae": 1.9115, "feb": 2.09, "febMae": 2.8122 },
+            "Guinea": { "jan": 8.20, "janMae": 0.8999, "feb": 8.83, "febMae": 1.2952 },
+            "Guyana": { "jan": 0.94, "janMae": 1.0778, "feb": 1.04, "febMae": 1.3258 },
+            "Honduras": { "jan": 6.03, "janMae": 1.0785, "feb": 5.99, "febMae": 1.6624 },
+            "India": { "jan": -1.25, "janMae": 1.3930, "feb": -0.75, "febMae": 2.0616 },
+            "Iraq": { "jan": -2.83, "janMae": 1.3720, "feb": -2.80, "febMae": 1.9183 },
+            "Israel": { "jan": 2.85, "janMae": 0.9379, "feb": 2.75, "febMae": 1.1570 },
+            "Jamaica": { "jan": 4.92, "janMae": 1.5538, "feb": 4.33, "febMae": 2.2079 },
+            "Japan": { "jan": 4.39, "janMae": 0.8475, "feb": 3.89, "febMae": 1.3715 },
+            "Kazakhstan": { "jan": 17.08, "janMae": 0.7424, "feb": 16.57, "febMae": 1.5211 },
+            "Kenya": { "jan": 8.09, "janMae": 0.8036, "feb": 8.41, "febMae": 1.2780 },
+            "Kuwait": { "jan": 5.49, "janMae": 0.5155, "feb": 5.43, "febMae": 0.8103 },
+            "Malaysia": { "jan": 1.52, "janMae": 0.3003, "feb": 1.68, "febMae": 0.5124 },
+            "Maldives": { "jan": -0.83, "janMae": 0.8183, "feb": -0.75, "febMae": 1.1849 },
+            "Mali": { "jan": -2.47, "janMae": 2.2271, "feb": -2.07, "febMae": 2.9729 },
+            "Malta": { "jan": -2.66, "janMae": 0.9641, "feb": -2.31, "febMae": 1.4880 },
+            "Mauritius": { "jan": 2.49, "janMae": 2.4508, "feb": 2.63, "febMae": 3.5544 },
+            "Mexico": { "jan": 2.67, "janMae": 0.8302, "feb": 3.32, "febMae": 1.4695 },
+            "Mozambique": { "jan": 5.42, "janMae": 1.8703, "feb": 5.71, "febMae": 2.8641 },
+            "Myanmar": { "jan": 28.48, "janMae": 1.8449, "feb": 28.13, "febMae": 3.1332 },
+            "Netherlands": { "jan": 4.03, "janMae": 0.7196, "feb": 3.83, "febMae": 1.3235 },
+            "New Zealand": { "jan": 4.32, "janMae": 0.8480, "feb": 4.18, "febMae": 1.3299 },
+            "Norway": { "jan": 3.44, "janMae": 2.9708, "feb": 3.35, "febMae": 3.1454 },
+            "Nicaragua": { "jan": 3.62, "janMae": 1.2125, "feb": 3.84, "febMae": 1.7913 },
+            "Oman": { "jan": 1.56, "janMae": 0.8105, "feb": 1.64, "febMae": 1.0943 },
+            "Paraguay": { "jan": 6.48, "janMae": 1.3017, "feb": 6.57, "febMae": 2.0089 },
+            "Peru": { "jan": 2.48, "janMae": 1.2057, "feb": 2.54, "febMae": 1.6193 },
+            "Poland": { "jan": 2.39, "janMae": 0.8834, "feb": 2.38, "febMae": 1.6771 },
+            "Portugal": { "jan": 3.14, "janMae": 1.5549, "feb": 2.90, "febMae": 2.3103 },
+            "Romania": { "jan": 10.80, "janMae": 0.9520, "feb": 10.27, "febMae": 1.8966 },
+            "Russia": { "jan": 2.69, "janMae": 1.1385, "feb": 2.00, "febMae": 2.1464 },
+            "Saudi Arabia": { "jan": 1.84, "janMae": 0.7374, "feb": 1.88, "febMae": 0.9994 },
+            "Serbia": { "jan": -2.10, "janMae": 1.2541, "feb": -2.09, "febMae": 1.9513 },
+            "Solomon Islands": { "jan": 8.40, "janMae": 1.6566, "feb": 8.26, "febMae": 2.2529 },
+            "Somalia": { "jan": 1.56, "janMae": 3.1990, "feb": 2.80, "febMae": 4.3580 },
+            "South Africa": { "jan": 4.36, "janMae": 0.6137, "feb": 4.49, "febMae": 0.9827 },
+            "Spain": { "jan": 2.36, "janMae": 0.9955, "feb": 2.32, "febMae": 1.4530 },
+            "Sweden": { "jan": 3.31, "janMae": 0.8581, "feb": 3.23, "febMae": 1.6613 },
+            "Switzerland": { "jan": -0.70, "janMae": 0.6614, "feb": -0.45, "febMae": 0.9957 },
+            "Tajikistan": { "jan": 4.49, "janMae": 1.1673, "feb": 4.91, "febMae": 1.7562 },
+            "Tanzania": { "jan": 6.61, "janMae": 0.6172, "feb": 6.28, "febMae": 0.9649 },
+            "Thailand": { "jan": -1.05, "janMae": 0.7442, "feb": -0.54, "febMae": 1.2294 },
+            "Togo": { "jan": 2.31, "janMae": 2.5382, "feb": 2.33, "febMae": 3.2575 },
+            "Tunisia": { "jan": 5.71, "janMae": 1.0196, "feb": 5.51, "febMae": 1.5837 },
+            "United Arab Emirates": { "jan": -0.38, "janMae": 0.9212, "feb": -0.18, "febMae": 1.2383 },
+            "United Kingdom": { "jan": 4.40, "janMae": 0.7200, "feb": 4.23, "febMae": 1.4112 },
+            "United States": { "jan": 1.61, "janMae": 0.5273, "feb": 1.60, "febMae": 0.8118 },
+            "Uruguay": { "jan": 4.93, "janMae": 1.1400, "feb": 5.25, "febMae": 1.6374 },
+            "Vietnam": { "jan": 2.26, "janMae": 0.7045, "feb": 2.53, "febMae": 0.9359 },
+            "Zambia": { "jan": 14.26, "janMae": 0.8260, "feb": 14.11, "febMae": 1.3945 }
         };
     </script>
 </head>
@@ -223,7 +283,7 @@
             <a href="javascript:void(0)" onclick="showPage('strategy')" class="hover:text-blue-600 transition">Global Strategy</a>
             <a href="javascript:void(0)" onclick="showPage('database')" class="hover:text-blue-600 transition">Database</a>
         </nav>
-        <button class="bg-[#7a9bb0] text-white px-6 py-2 rounded-xl font-black text-xs uppercase shadow-lg hover:bg-[#6c8ca1] transition-all transform hover:scale-105">Research Report upload </button>
+        <button class="bg-[#7a9bb0] text-white w-[240px] py-2 rounded-xl font-black text-xs uppercase shadow-lg hover:bg-[#6c8ca1] transition-all transform hover:scale-105" onclick="openContactModal()">CONTACT US </button>
     </header>
 
     <div id="home-page" class="page-content active-page">
@@ -254,7 +314,7 @@
                     </div>
                     <div id="awlmMap" class="w-full h-[680px]"></div>
                     <div class="map-legend-inner shadow-2xl border border-white/10">
-                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 italic">Dual-branch Prediction Model Inflation Index</p>
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 italic">Feb 2026 Dual-branch Prediction Model Inflation Index</p>
                         <div class="flex flex-col space-y-2.5">
                             <div class="w-full h-2.5 rounded-full" style="background: linear-gradient(to right, #B2D8E5, #7A9BB0, #5E819D, #CA706E);"></div>
                             <div class="flex justify-between text-[8px] font-black text-slate-400 uppercase tracking-tighter">
@@ -479,7 +539,7 @@
                                 <div id="strategy-${n}" class="bg-white p-6 rounded-3xl shadow-sm hover:shadow-md transition border-2 border-transparent hover:border-[#7A9BB0]">
                                     <div class="flex justify-between items-center mb-4">
                                         <span class="text-xs font-bold text-[#7a9bb0] bg-[#f0f4f8] px-3 py-1 rounded-full uppercase">${n} Report</span>
-                                        <span class="text-[12px] text-gray-400 italic">Cycle: 2026.Q3</span>
+                                        <span class="text-[12px] text-gray-400 italic">Cycle: 2026.Q1</span>
                                     </div>
                                     <h4 class="text-lg font-black text-[#4a6572] mb-3 underline decoration-[#c9dae0] underline-offset-4">${n}</h4>
                                     <p class="text-gray-500 text-xs leading-relaxed mb-6">Based on Dual-branch Prediction Model projections, inflation in ${n} is driven by specific multi-view feature correlations.</p>
@@ -564,9 +624,10 @@
                         <tr>
                             <th class="p-5">Nation ID</th>
                             <th class="p-5">Country</th>
-                            <th class="p-5">Sep Forecast</th>
-                            <th class="p-5">Oct Forecast</th>
-                            <th class="p-5">Confidence Interval</th>
+                            <th class="p-5">Jan Forecast</th>
+                            <th class="p-5">Jan MAE</th>
+                            <th class="p-5">Feb Forecast</th>
+                            <th class="p-5">Feb MAE</th>
                             <th class="p-5">Action</th>
                         </tr>
                     </thead>
@@ -597,14 +658,15 @@
                                 // 这里的 inflationForecastData 必须已经在下方 script 块中定义
                                 let rowData = (typeof inflationForecastData !== 'undefined' && inflationForecastData[name]) 
                                             ? inflationForecastData[name] 
-                                            : { sep: 0, oct: 0 };
+                                            : { jan: 0, janMae: 0, feb: 0, febMae: 0 };
                                 
-                                let mVal = rowData.sep;
-                                let jVal = rowData.oct;
+                                let mVal = rowData.jan;
+                                let janMae = rowData.janMae;
+                                let jVal = rowData.feb;
+                                let febMae = rowData.febMae;
                                 
                                 let num = i + 1;
                                 let natID = "NAT-" + (num < 10 ? "0" + num : num);
-                                let confidenceHalfWidth = (Math.random() * 0.5 + 0.45).toFixed(2);
 
                                 document.write('<tr class="hover:bg-[#f8fafc] transition">');
                                 document.write('<td class="p-5 font-bold text-[#4a6572]">' + natID + '</td>');
@@ -612,9 +674,9 @@
                                 
                                 //使用获取到的数值 mVal 和 jVal
                                 document.write('<td class="p-5 font-bold text-[#618AA1]">' + mVal.toFixed(2) + '%</td>');
+                                document.write('<td class="p-5 font-bold text-slate-500">' + janMae.toFixed(2) + ' pp</td>');
                                 document.write('<td class="p-5 font-bold text-[#72A6AD]">' + jVal.toFixed(2) + '%</td>');
-                                
-                                document.write('<td class="p-5"><span class="bg-[#F3EDEA] text-[#C19A8B] px-2 py-0.5 rounded font-bold text-[10px]">± ' + confidenceHalfWidth + '%</span></td>');
+                                document.write('<td class="p-5 font-bold text-slate-500">' + febMae.toFixed(2) + ' pp</td>');
                                 document.write('<td class="p-5">');
                                 document.write('<button onclick="window.location.href=\'data/' + name + '.csv\'" class="text-[#4a6572] font-black hover:text-[#7A9BB0] transition uppercase flex items-center gap-2">');
                                 document.write('<i class="fas fa-file-csv"></i> Export CSV');
@@ -738,10 +800,10 @@
 // 1. 扩展专项国家数据：包含风险等级和深度分析特点
 const countryDetailData = {
     "Afghanistan": {
-        inflation: "-2.22%",
-        change: "+0.89%",
+        inflation: "7.55%",
+        change: "+0.26%",
         confidence: "89.4%",
-        level: "deflation",
+        level: "warning",
         pearson: [
             { name: "GDP", value: 0.35 },
             { name: "Population", value: 0.34 },
@@ -769,8 +831,8 @@ const countryDetailData = {
         ]
     },
     "Australia": {
-        inflation: "3.16%",
-        change: "+0.1%",
+        inflation: "4.00%",
+        change: "+0.03%",
         confidence: "94.2%",
         level: "safe",
         pearson: [
@@ -800,8 +862,8 @@ const countryDetailData = {
         ]
     },
     "Austria": {
-        inflation: "2.6%",
-        change: "+0.54%",
+        inflation: "3.31%",
+        change: "-0.07%",
         confidence: "95.8%",
         level: "safe",
         pearson: [
@@ -831,10 +893,10 @@ const countryDetailData = {
         ]
     },
     "Azerbaijan": {
-        inflation: "5.96%",
-        change: "+0.78%",
+        inflation: "6.22%",
+        change: "+0.19%",
         confidence: "91.2%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Exchange Rate", value: 0.22 },
             { name: "Fatalities", value: 0.2 },
@@ -862,10 +924,10 @@ const countryDetailData = {
         ]
     },
     "Bahrain": {
-        inflation: "-0.79%",
-        change: "+0.77%",
+        inflation: "1.05%",
+        change: "+0.39%",
         confidence: "90.5%",
-        level: "deflation",
+        level: "safe",
         pearson: [
             { name: "Headline Inflation", value: 0.54 },
             { name: "GDP", value: 0.36 },
@@ -893,8 +955,8 @@ const countryDetailData = {
         ]
     },
     "Bangladesh": {
-        inflation: "9.25%",
-        change: "-1.46%",
+        inflation: "7.31%",
+        change: "-0.00%",
         confidence: "88.7%",
         level: "warning",
         pearson: [
@@ -924,8 +986,8 @@ const countryDetailData = {
         ]
     },
     "Barbados": {
-        inflation: "1.25%",
-        change: "+0.34%",
+        inflation: "2.22%",
+        change: "+0.27%",
         confidence: "91.8%",
         level: "safe",
         pearson: [
@@ -955,10 +1017,10 @@ const countryDetailData = {
         ]
     },
     "Belarus": {
-        inflation: "5.91%",
-        change: "+0.29%",
+        inflation: "8.44%",
+        change: "-0.45%",
         confidence: "92.4%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Headline Inflation", value: 0.59 },
             { name: "W-cifvalue", value: 0.42 },
@@ -986,8 +1048,8 @@ const countryDetailData = {
         ]
     },
     "Belgium": {
-        inflation: "2.44%",
-        change: "+0.01%",
+        inflation: "2.58%",
+        change: "-0.03%",
         confidence: "96.9%",
         level: "safe",
         pearson: [
@@ -1017,10 +1079,10 @@ const countryDetailData = {
         ]
     },
     "Belize": {
-        inflation: "2.46%",
-        change: "+0.24%",
+        inflation: "-0.71%",
+        change: "-0.15%",
         confidence: "91.1%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "Headline Inflation", value: 0.34 },
             { name: "Fatalities", value: 0.22 },
@@ -1048,8 +1110,8 @@ const countryDetailData = {
         ]
     },
     "Brazil": {
-        inflation: "6.97%",
-        change: "-0.29%",
+        inflation: "2.47%",
+        change: "+0.21%",
         confidence: "95.2%",
         level: "safe",
         pearson: [
@@ -1079,10 +1141,10 @@ const countryDetailData = {
         ]
     },
     "Bulgaria": {
-        inflation: "4.58%",
-        change: "+0.16%",
+        inflation: "5.01%",
+        change: "-0.19%",
         confidence: "93.1%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Headline Inflation", value: 0.33 },
             { name: "Net Refugees", value: 0.28 },
@@ -1110,8 +1172,8 @@ const countryDetailData = {
         ]
     },
     "Burkina Faso": {
-        inflation: "0.0%",
-        change: "+0.0%",
+        inflation: "-2.78%",
+        change: "+0.55%",
         confidence: "85.4%",
         level: "deflation",
         pearson: [
@@ -1141,10 +1203,10 @@ const countryDetailData = {
         ]
     },
     "Burundi": {
-        inflation: "38.67%",
-        change: "-0.31%",
+        inflation: "8.15%",
+        change: "+0.42%",
         confidence: "82.6%",
-        level: "critical",
+        level: "warning",
         pearson: [
             { name: "Headline Inflation", value: 0.32 },
             { name: "Fatalities", value: 0.3 },
@@ -1172,8 +1234,8 @@ const countryDetailData = {
         ]
     },
     "Cambodia": {
-        inflation: "6.57%",
-        change: "-1.26%",
+        inflation: "3.01%",
+        change: "-0.14%",
         confidence: "91.8%",
         level: "safe",
         pearson: [
@@ -1203,8 +1265,8 @@ const countryDetailData = {
         ]
     },
     "Cameroon": {
-        inflation: "7.27%",
-        change: "-0.63%",
+        inflation: "6.02%",
+        change: "-0.40%",
         confidence: "88.9%",
         level: "warning",
         pearson: [
@@ -1234,8 +1296,8 @@ const countryDetailData = {
         ]
     },
     "Canada": {
-        inflation: "2.8%",
-        change: "+0.92%",
+        inflation: "4.35%",
+        change: "-0.27%",
         confidence: "97.1%",
         level: "safe",
         pearson: [
@@ -1265,10 +1327,10 @@ const countryDetailData = {
         ]
     },
     "Chad": {
-        inflation: "4.0%",
-        change: "-0.68%",
+        inflation: "-7.84%",
+        change: "+1.05%",
         confidence: "84.9%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "Population", value: 0.27 },
             { name: "Net Refugees", value: 0.26 },
@@ -1296,8 +1358,8 @@ const countryDetailData = {
         ]
     },
     "Chile": {
-        inflation: "2.91%",
-        change: "-0.05%",
+        inflation: "4.45%",
+        change: "+0.05%",
         confidence: "95.8%",
         level: "safe",
         pearson: [
@@ -1327,8 +1389,8 @@ const countryDetailData = {
         ]
     },
     "China": {
-        inflation: "-3.23%",
-        change: "-3.7%",
+        inflation: "-3.95%",
+        change: "+0.61%",
         confidence: "96.5%",
         level: "deflation",
         pearson: [
@@ -1358,10 +1420,10 @@ const countryDetailData = {
         ]
     },
     "Colombia": {
-        inflation: "4.56%",
-        change: "+0.07%",
+        inflation: "5.32%",
+        change: "-0.01%",
         confidence: "94.1%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Exchange Rate", value: 0.52 },
             { name: "GDP", value: 0.43 },
@@ -1389,10 +1451,10 @@ const countryDetailData = {
         ]
     },
     "Costa Rica": {
-        inflation: "6.75%",
-        change: "+0.7%",
+        inflation: "-2.57%",
+        change: "+0.31%",
         confidence: "93.5%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "GDP", value: 0.66 },
             { name: "Fatalities", value: 0.66 },
@@ -1420,8 +1482,8 @@ const countryDetailData = {
         ]
     },
     "Croatia": {
-        inflation: "5.12%",
-        change: "+0.03%",
+        inflation: "0.50%",
+        change: "+0.17%",
         confidence: "95.2%",
         level: "safe",
         pearson: [
@@ -1451,10 +1513,10 @@ const countryDetailData = {
         ]
     },
     "Cyprus": {
-        inflation: "2.25%",
-        change: "-2.56%",
+        inflation: "-1.31%",
+        change: "+0.86%",
         confidence: "94.8%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "Population", value: 0.45 },
             { name: "Fatalities", value: 0.44 },
@@ -1482,8 +1544,8 @@ const countryDetailData = {
         ]
     },
     "Czech Republic": {
-        inflation: "4.44%",
-        change: "-0.34%",
+        inflation: "1.08%",
+        change: "+0.18%",
         confidence: "96.1%",
         level: "safe",
         pearson: [
@@ -1513,8 +1575,8 @@ const countryDetailData = {
         ]
     },
     "Denmark": {
-        inflation: "5.69%",
-        change: "+1.28%",
+        inflation: "3.03%",
+        change: "-0.09%",
         confidence: "97.4%",
         level: "safe",
         pearson: [
@@ -1544,8 +1606,8 @@ const countryDetailData = {
         ]
     },
     "Djibouti": {
-        inflation: "-2.57%",
-        change: "+1.16%",
+        inflation: "-0.82%",
+        change: "+0.20%",
         confidence: "88.2%",
         level: "deflation",
         pearson: [
@@ -1575,10 +1637,10 @@ const countryDetailData = {
         ]
     },
     "Dominican Republic": {
-        inflation: "3.8%",
-        change: "+0.68%",
+        inflation: "8.90%",
+        change: "-0.01%",
         confidence: "94.5%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "GDP", value: 0.44 },
             { name: "Headline Inflation", value: 0.43 },
@@ -1606,10 +1668,10 @@ const countryDetailData = {
         ]
     },
     "Ecuador": {
-        inflation: "-0.11%",
-        change: "-0.3%",
+        inflation: "1.30%",
+        change: "+0.26%",
         confidence: "92.8%",
-        level: "deflation",
+        level: "safe",
         pearson: [
             { name: "Headline Inflation", value: 0.73 },
             { name: "Population", value: 0.48 },
@@ -1637,10 +1699,10 @@ const countryDetailData = {
         ]
     },
     "Egypt": {
-        inflation: "3.74%",
-        change: "-17.06%",
+        inflation: "15.65%",
+        change: "+0.13%",
         confidence: "93.1%",
-        level: "safe",
+        level: "critical",
         pearson: [
             { name: "Exchange Rate", value: 0.55 },
             { name: "Fatalities", value: 0.49 },
@@ -1668,10 +1730,10 @@ const countryDetailData = {
         ]
     },
     "El Salvador": {
-        inflation: "-0.55%",
-        change: "-0.05%",
+        inflation: "1.04%",
+        change: "+0.21%",
         confidence: "91.2%",
-        level: "deflation",
+        level: "safe",
         pearson: [
             { name: "Headline Inflation", value: 0.75 },
             { name: "Population", value: 0.48 },
@@ -1699,8 +1761,8 @@ const countryDetailData = {
         ]
     },
     "Ethiopia": {
-        inflation: "14.6%",
-        change: "-1.2%",
+        inflation: "11.20%",
+        change: "+0.45%",
         confidence: "87.5%",
         level: "warning",
         pearson: [
@@ -1730,8 +1792,8 @@ const countryDetailData = {
         ]
     },
     "Fiji": {
-        inflation: "0.13%",
-        change: "-8.34%",
+        inflation: "0.25%",
+        change: "+1.00%",
         confidence: "90.2%",
         level: "safe",
         pearson: [
@@ -1761,8 +1823,8 @@ const countryDetailData = {
         ]
     },
     "France": {
-        inflation: "0.35%",
-        change: "+0.24%",
+        inflation: "1.69%",
+        change: "-0.05%",
         confidence: "97.8%",
         level: "safe",
         pearson: [
@@ -1792,10 +1854,10 @@ const countryDetailData = {
         ]
     },
     "Georgia": {
-        inflation: "3.66%",
-        change: "+0.64%",
+        inflation: "8.12%",
+        change: "-0.24%",
         confidence: "93.6%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Fatalities", value: 0.39 },
             { name: "Population", value: 0.27 },
@@ -1823,8 +1885,8 @@ const countryDetailData = {
         ]
     },
     "Germany": {
-        inflation: "2.8%",
-        change: "+1.36%",
+        inflation: "1.48%",
+        change: "+0.01%",
         confidence: "97.6%",
         level: "safe",
         pearson: [
@@ -1854,10 +1916,10 @@ const countryDetailData = {
         ]
     },
     "Ghana": {
-        inflation: "28.1%",
-        change: "-0.2%",
+        inflation: "1.82%",
+        change: "+0.37%",
         confidence: "86.9%",
-        level: "critical",
+        level: "safe",
         pearson: [
             { name: "Fatalities", value: 0.6 },
             { name: "Population", value: 0.54 },
@@ -1885,8 +1947,8 @@ const countryDetailData = {
         ]
     },
     "Greece": {
-        inflation: "0.18%",
-        change: "+0.05%",
+        inflation: "3.58%",
+        change: "-0.17%",
         confidence: "95.5%",
         level: "safe",
         pearson: [
@@ -1916,8 +1978,8 @@ const countryDetailData = {
         ]
     },
     "Guatemala": {
-        inflation: "3.17%",
-        change: "-0.31%",
+        inflation: "2.09%",
+        change: "+1.84%",
         confidence: "91.8%",
         level: "safe",
         pearson: [
@@ -1947,8 +2009,8 @@ const countryDetailData = {
         ]
     },
     "Guinea": {
-        inflation: "9.51%",
-        change: "-2.77%",
+        inflation: "8.83%",
+        change: "+0.63%",
         confidence: "88.5%",
         level: "warning",
         pearson: [
@@ -1978,8 +2040,8 @@ const countryDetailData = {
         ]
     },
     "Guyana": {
-        inflation: "2.08%",
-        change: "-0.06%",
+        inflation: "1.04%",
+        change: "+0.10%",
         confidence: "92.4%",
         level: "safe",
         pearson: [
@@ -2009,10 +2071,10 @@ const countryDetailData = {
         ]
     },
     "Honduras": {
-        inflation: "3.25%",
-        change: "+0.82%",
+        inflation: "5.99%",
+        change: "-0.03%",
         confidence: "90.6%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Headline Inflation", value: 0.37 },
             { name: "Net Refugees", value: 0.36 },
@@ -2040,10 +2102,10 @@ const countryDetailData = {
         ]
     },
     "India": {
-        inflation: "3.84%",
-        change: "-1.84%",
+        inflation: "-0.75%",
+        change: "+0.50%",
         confidence: "95.1%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "Fatalities", value: 0.68 },
             { name: "Net Refugees", value: 0.5 },
@@ -2071,10 +2133,10 @@ const countryDetailData = {
         ]
     },
     "Iraq": {
-        inflation: "1.02%",
-        change: "-0.38%",
+        inflation: "-2.80%",
+        change: "+0.02%",
         confidence: "89.2%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "Headline Inflation", value: 0.75 },
             { name: "Population", value: 0.61 },
@@ -2102,8 +2164,8 @@ const countryDetailData = {
         ]
     },
     "Israel": {
-        inflation: "3.48%",
-        change: "-1.27%",
+        inflation: "2.75%",
+        change: "-0.09%",
         confidence: "94.6%",
         level: "safe",
         pearson: [
@@ -2133,8 +2195,8 @@ const countryDetailData = {
         ]
     },
     "Italy": {
-        inflation: "2.38%",
-        change: "+0.31%",
+        inflation: "1.97%",
+        change: "-0.02%",
         confidence: "96.8%",
         level: "safe",
         pearson: [
@@ -2164,8 +2226,8 @@ const countryDetailData = {
         ]
     },
     "Jamaica": {
-        inflation: "6.57%",
-        change: "-0.86%",
+        inflation: "4.33%",
+        change: "-0.60%",
         confidence: "91.4%",
         level: "safe",
         pearson: [
@@ -2195,10 +2257,10 @@ const countryDetailData = {
         ]
     },
     "Japan": {
-        inflation: "7.62%",
-        change: "-0.13%",
+        inflation: "3.89%",
+        change: "-0.50%",
         confidence: "96.8%",
-        level: "warning",
+        level: "safe",
         pearson: [
             { name: "Net Refugees", value: 0.39 },
             { name: "Fatalities", value: 0.39 },
@@ -2226,10 +2288,10 @@ const countryDetailData = {
         ]
     },
     "Kazakhstan": {
-        inflation: "6.23%",
-        change: "+0.72%",
+        inflation: "16.57%",
+        change: "-0.51%",
         confidence: "93.2%",
-        level: "safe",
+        level: "critical",
         pearson: [
             { name: "Fatalities", value: 0.17 },
             { name: "SPEI", value: 0.11 },
@@ -2257,10 +2319,10 @@ const countryDetailData = {
         ]
     },
     "Kenya": {
-        inflation: "6.01%",
-        change: "+0.31%",
+        inflation: "8.41%",
+        change: "+0.32%",
         confidence: "89.8%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Headline Inflation", value: 0.3 },
             { name: "Disaster Affected", value: 0.11 },
@@ -2288,10 +2350,10 @@ const countryDetailData = {
         ]
     },
     "Kuwait": {
-        inflation: "5.23%",
-        change: "+0.04%",
+        inflation: "5.43%",
+        change: "-0.05%",
         confidence: "94.5%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Exchange Rate", value: 0.69 },
             { name: "Headline Inflation", value: 0.56 },
@@ -2319,8 +2381,8 @@ const countryDetailData = {
         ]
     },
     "Malaysia": {
-        inflation: "2.67%",
-        change: "-0.27%",
+        inflation: "1.68%",
+        change: "+0.16%",
         confidence: "95.4%",
         level: "safe",
         pearson: [
@@ -2350,10 +2412,10 @@ const countryDetailData = {
         ]
     },
     "Maldives": {
-        inflation: "6.3%",
-        change: "-1.07%",
+        inflation: "-0.75%",
+        change: "+0.08%",
         confidence: "89.5%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "Net Refugees", value: 0.36 },
             { name: "Headline Inflation", value: 0.33 },
@@ -2381,10 +2443,10 @@ const countryDetailData = {
         ]
     },
     "Mali": {
-        inflation: "8.11%",
-        change: "-0.06%",
+        inflation: "-2.07%",
+        change: "+0.39%",
         confidence: "87.2%",
-        level: "warning",
+        level: "deflation",
         pearson: [
             { name: "Headline Inflation", value: 0.49 },
             { name: "Net Refugees", value: 0.22 },
@@ -2412,10 +2474,10 @@ const countryDetailData = {
         ]
     },
     "Malta": {
-        inflation: "2.38%",
-        change: "+1.02%",
+        inflation: "-2.31%",
+        change: "+0.35%",
         confidence: "95.8%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "Fatalities", value: 0.31 },
             { name: "Net Refugees", value: 0.25 },
@@ -2443,10 +2505,10 @@ const countryDetailData = {
         ]
     },
     "Mauritius": {
-        inflation: "-4.86%",
-        change: "-6.73%",
+        inflation: "2.63%",
+        change: "+0.14%",
         confidence: "91.5%",
-        level: "deflation",
+        level: "safe",
         pearson: [
             { name: "Net Refugees", value: 0.43 },
             { name: "Fatalities", value: 0.26 },
@@ -2474,8 +2536,8 @@ const countryDetailData = {
         ]
     },
     "Mexico": {
-        inflation: "4.09%",
-        change: "+1.44%",
+        inflation: "3.32%",
+        change: "+0.64%",
         confidence: "93.8%",
         level: "safe",
         pearson: [
@@ -2505,8 +2567,8 @@ const countryDetailData = {
         ]
     },
     "Mozambique": {
-        inflation: "11.89%",
-        change: "-0.15%",
+        inflation: "5.71%",
+        change: "+0.30%",
         confidence: "86.5%",
         level: "warning",
         pearson: [
@@ -2536,10 +2598,10 @@ const countryDetailData = {
         ]
     },
     "Myanmar": {
-        inflation: "0.0%",
-        change: "+0.0%",
+        inflation: "28.13%",
+        change: "-0.35%",
         confidence: "84.2%",
-        level: "deflation",
+        level: "critical",
         pearson: [
             { name: "Headline Inflation", value: 0.87 },
             { name: "Net Refugees", value: 0.56 },
@@ -2567,8 +2629,8 @@ const countryDetailData = {
         ]
     },
     "Netherlands": {
-        inflation: "4.32%",
-        change: "+0.79%",
+        inflation: "3.83%",
+        change: "-0.20%",
         confidence: "97.5%",
         level: "safe",
         pearson: [
@@ -2598,8 +2660,8 @@ const countryDetailData = {
         ]
     },
     "New Zealand": {
-        inflation: "2.28%",
-        change: "+0.24%",
+        inflation: "4.18%",
+        change: "-0.14%",
         confidence: "96.5%",
         level: "safe",
         pearson: [
@@ -2629,10 +2691,10 @@ const countryDetailData = {
         ]
     },
     "Nicaragua": {
-        inflation: "0.0%",
-        change: "+0.0%",
+        inflation: "3.84%",
+        change: "+0.23%",
         confidence: "88.4%",
-        level: "deflation",
+        level: "safe",
         pearson: [
             { name: "Fatalities", value: 0.48 },
             { name: "SPEI", value: 0.26 },
@@ -2660,10 +2722,10 @@ const countryDetailData = {
         ]
     },
     "Nigeria": {
-        inflation: "27.26%",
-        change: "-2.13%",
+        inflation: "9.82%",
+        change: "-1.53%",
         confidence: "86.2%",
-        level: "critical",
+        level: "warning",
         pearson: [
             { name: "Headline Inflation", value: 0.36 },
             { name: "GDP", value: 0.3 },
@@ -2691,10 +2753,10 @@ const countryDetailData = {
         ]
     },
     "Norway": {
-        inflation: "7.49%",
-        change: "+2.53%",
+        inflation: "3.35%",
+        change: "-0.09%",
         confidence: "95.8%",
-        level: "warning",
+        level: "safe",
         pearson: [
             { name: "Fatalities", value: 0.43 },
             { name: "Exchange Rate", value: 0.24 },
@@ -2722,10 +2784,10 @@ const countryDetailData = {
         ]
     },
     "Oman": {
-        inflation: "0.0%",
-        change: "-0.88%",
+        inflation: "1.64%",
+        change: "+0.09%",
         confidence: "93.4%",
-        level: "deflation",
+        level: "safe",
         pearson: [
             { name: "Headline Inflation", value: 0.5 },
             { name: "Net Refugees", value: 0.34 },
@@ -2753,10 +2815,10 @@ const countryDetailData = {
         ]
     },
     "Paraguay": {
-        inflation: "4.9%",
-        change: "+0.53%",
+        inflation: "6.57%",
+        change: "+0.09%",
         confidence: "92.8%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Net Refugees", value: 0.59 },
             { name: "Headline Inflation", value: 0.53 },
@@ -2784,10 +2846,10 @@ const countryDetailData = {
         ]
     },
     "Peru": {
-        inflation: "-0.16%",
-        change: "-0.29%",
+        inflation: "2.54%",
+        change: "+0.06%",
         confidence: "91.9%",
-        level: "deflation",
+        level: "safe",
         pearson: [
             { name: "Headline Inflation", value: 0.61 },
             { name: "Fatalities", value: 0.42 },
@@ -2815,8 +2877,8 @@ const countryDetailData = {
         ]
     },
     "Poland": {
-        inflation: "6.17%",
-        change: "+0.75%",
+        inflation: "2.38%",
+        change: "-0.02%",
         confidence: "95.6%",
         level: "safe",
         pearson: [
@@ -2846,8 +2908,8 @@ const countryDetailData = {
         ]
     },
     "Portugal": {
-        inflation: "1.55%",
-        change: "+0.11%",
+        inflation: "2.90%",
+        change: "-0.24%",
         confidence: "96.2%",
         level: "safe",
         pearson: [
@@ -2877,10 +2939,10 @@ const countryDetailData = {
         ]
     },
     "Romania": {
-        inflation: "4.5%",
-        change: "-0.04%",
+        inflation: "10.27%",
+        change: "-0.52%",
         confidence: "94.9%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Population", value: 0.79 },
             { name: "Headline Inflation", value: 0.74 },
@@ -2908,10 +2970,10 @@ const countryDetailData = {
         ]
     },
     "Russia": {
-        inflation: "11.8%",
-        change: "+0.45%",
+        inflation: "2.00%",
+        change: "-0.69%",
         confidence: "94.2%",
-        level: "warning",
+        level: "safe",
         pearson: [
             { name: "GDP", value: 0.5 },
             { name: "Headline Inflation", value: 0.46 },
@@ -2939,8 +3001,8 @@ const countryDetailData = {
         ]
     },
     "Saudi Arabia": {
-        inflation: "1.02%",
-        change: "+0.22%",
+        inflation: "1.88%",
+        change: "+0.04%",
         confidence: "95.5%",
         level: "safe",
         pearson: [
@@ -2970,10 +3032,10 @@ const countryDetailData = {
         ]
     },
     "Serbia": {
-        inflation: "4.28%",
-        change: "+0.18%",
+        inflation: "-2.09%",
+        change: "+0.01%",
         confidence: "93.8%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "Net Refugees", value: 0.74 },
             { name: "GDP", value: 0.55 },
@@ -3001,10 +3063,10 @@ const countryDetailData = {
         ]
     },
     "Solomon Islands": {
-        inflation: "-0.99%",
-        change: "-2.36%",
+        inflation: "8.26%",
+        change: "-0.14%",
         confidence: "88.6%",
-        level: "deflation",
+        level: "warning",
         pearson: [
             { name: "Population", value: 0.51 },
             { name: "Fatalities", value: 0.49 },
@@ -3032,10 +3094,10 @@ const countryDetailData = {
         ]
     },
     "Somalia": {
-        inflation: "0.0%",
-        change: "+0.0%",
+        inflation: "2.80%",
+        change: "+1.25%",
         confidence: "82.5%",
-        level: "deflation",
+        level: "safe",
         pearson: [
             { name: "Population", value: 0.73 },
             { name: "Net Refugees", value: 0.59 },
@@ -3063,8 +3125,8 @@ const countryDetailData = {
         ]
     },
     "South Africa": {
-        inflation: "3.03%",
-        change: "+0.42%",
+        inflation: "4.49%",
+        change: "+0.14%",
         confidence: "94.8%",
         level: "safe",
         pearson: [
@@ -3094,8 +3156,8 @@ const countryDetailData = {
         ]
     },
     "Spain": {
-        inflation: "2.18%",
-        change: "+0.36%",
+        inflation: "2.32%",
+        change: "-0.04%",
         confidence: "96.4%",
         level: "safe",
         pearson: [
@@ -3125,8 +3187,8 @@ const countryDetailData = {
         ]
     },
     "Sweden": {
-        inflation: "3.91%",
-        change: "+1.74%",
+        inflation: "3.23%",
+        change: "-0.09%",
         confidence: "95.9%",
         level: "safe",
         pearson: [
@@ -3156,8 +3218,8 @@ const countryDetailData = {
         ]
     },
     "Switzerland": {
-        inflation: "-0.62%",
-        change: "+0.43%",
+        inflation: "-0.45%",
+        change: "+0.25%",
         confidence: "97.1%",
         level: "deflation",
         pearson: [
@@ -3187,8 +3249,8 @@ const countryDetailData = {
         ]
     },
     "Tajikistan": {
-        inflation: "3.53%",
-        change: "+0.02%",
+        inflation: "4.91%",
+        change: "+0.42%",
         confidence: "91.5%",
         level: "safe",
         pearson: [
@@ -3218,10 +3280,10 @@ const countryDetailData = {
         ]
     },
     "Tanzania": {
-        inflation: "4.96%",
-        change: "-0.38%",
+        inflation: "6.28%",
+        change: "-0.33%",
         confidence: "91.2%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "C-cifvalue", value: 0.59 },
             { name: "W-cifvalue", value: 0.5 },
@@ -3249,10 +3311,10 @@ const countryDetailData = {
         ]
     },
     "Thailand": {
-        inflation: "1.18%",
-        change: "+0.25%",
+        inflation: "-0.54%",
+        change: "+0.50%",
         confidence: "96.4%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "Exchange Rate", value: 0.37 },
             { name: "Headline Inflation", value: 0.36 },
@@ -3280,8 +3342,8 @@ const countryDetailData = {
         ]
     },
     "Togo": {
-        inflation: "6.8%",
-        change: "-2.21%",
+        inflation: "2.33%",
+        change: "+0.02%",
         confidence: "88.2%",
         level: "safe",
         pearson: [
@@ -3311,10 +3373,10 @@ const countryDetailData = {
         ]
     },
     "Tunisia": {
-        inflation: "6.95%",
-        change: "-0.15%",
+        inflation: "5.51%",
+        change: "-0.20%",
         confidence: "90.5%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "GDP", value: 0.49 },
             { name: "Fatalities", value: 0.33 },
@@ -3342,10 +3404,10 @@ const countryDetailData = {
         ]
     },
     "Uganda": {
-        inflation: "2.24%",
-        change: "+1.65%",
+        inflation: "5.88%",
+        change: "+0.18%",
         confidence: "91.8%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Headline Inflation", value: 0.44 },
             { name: "Fatalities", value: 0.18 },
@@ -3373,10 +3435,10 @@ const countryDetailData = {
         ]
     },
     "Ukraine": {
-        inflation: "15.16%",
-        change: "+0.91%",
+        inflation: "14.46%",
+        change: "-0.34%",
         confidence: "85.6%",
-        level: "critical",
+        level: "warning",
         pearson: [
             { name: "Net Refugees", value: 0.43 },
             { name: "Exchange Rate", value: 0.32 },
@@ -3404,10 +3466,10 @@ const countryDetailData = {
         ]
     },
     "United Arab Emirates": {
-        inflation: "0.2%",
-        change: "-0.68%",
+        inflation: "-0.18%",
+        change: "+0.20%",
         confidence: "95.2%",
-        level: "safe",
+        level: "deflation",
         pearson: [
             { name: "Net Refugees", value: 0.51 },
             { name: "Fatalities", value: 0.19 },
@@ -3435,8 +3497,8 @@ const countryDetailData = {
         ]
     },
     "United Kingdom": {
-        inflation: "3.33%",
-        change: "-0.01%",
+        inflation: "4.23%",
+        change: "-0.18%",
         confidence: "96.1%",
         level: "safe",
         pearson: [
@@ -3466,10 +3528,10 @@ const countryDetailData = {
         ]
     },
     "United States": {
-        inflation: "0.0%",
-        change: "+0.0%",
+        inflation: "1.60%",
+        change: "-0.01%",
         confidence: "97.5%",
-        level: "deflation",
+        level: "safe",
         pearson: [
             { name: "Fatalities", value: 0.41 },
             { name: "Population", value: 0.32 },
@@ -3497,10 +3559,10 @@ const countryDetailData = {
         ]
     },
     "Uruguay": {
-        inflation: "3.85%",
-        change: "-0.43%",
+        inflation: "5.25%",
+        change: "+0.32%",
         confidence: "93.4%",
-        level: "safe",
+        level: "warning",
         pearson: [
             { name: "Headline Inflation", value: 0.77 },
             { name: "Exchange Rate", value: 0.34 },
@@ -3528,8 +3590,8 @@ const countryDetailData = {
         ]
     },
     "Uzbekistan": {
-        inflation: "8.94%",
-        change: "-0.69%",
+        inflation: "5.63%",
+        change: "-0.05%",
         confidence: "92.1%",
         level: "warning",
         pearson: [
@@ -3559,8 +3621,8 @@ const countryDetailData = {
         ]
     },
     "Zambia": {
-        inflation: "12.01%",
-        change: "+0.14%",
+        inflation: "14.11%",
+        change: "-0.15%",
         confidence: "88.6%",
         level: "warning",
         pearson: [
@@ -3589,35 +3651,34 @@ const countryDetailData = {
             { label: "Outlook", value: "Cautious", desc: "High inflation levels require stable rainfall and monetary intervention to prevent a shift to critical levels." }
         ]
     },
-    "Zimbabwe": {
-        inflation: "35.25%",
-        change: "-5.42%",
-        confidence: "84.5%",
-        level: "critical",
+    "Vietnam": {
+        inflation: "2.53%",
+        change: "+0.27%",
+        confidence: "N/A",
+        level: "safe",
         pearson: [
-            { name: "Exchange Rate", value: 0.78 },
-            { name: "Headline Inflation", value: 0.69 },
-            { name: "GDP", value: 0.44 },
-            { name: "Population", value: 0.31 },
-            { name: "Fatalities", value: 0.25 }
+            { name: "Headline Inflation", value: 0.205 },
+            { name: "W-cifvalue", value: 0.201 },
+            { name: "C-fobvalue", value: 0.194 },
+            { name: "S-cifvalue", value: 0.181 },
+            { name: "NDVI Ratio", value: 0.174 }
         ],
         shap: [
-            { name: "Food Inflation", value: 2.5408 },
-            { name: "Exchange Rate", value: 0.3216 },
-            { name: "Headline Inflation", value: 0.1504 },
-            { name: "Fatalities", value: -0.0827 },
-            { name: "GDP", value: 0.0 }
+            { name: "Food Inflation", value: -0.80 },
+            { name: "Headline Inflation", value: -0.07 },
+            { name: "C-fobvalue", value: 0.05 },
+            { name: "W-cifvalue", value: -0.04 }
         ],
         profile: {
-            region: "Southern Africa",
-            status: "Hyper-inflationary Fragility",
-            bio: "Zimbabwe faces a critical food security and inflation crisis, characterized by systemic currency instability and high structural poverty. While once a regional breadbasket, agricultural productivity has been hampered by policy shifts and climate shocks. Food inflation is the highest in our index, driven by the collapse of local currency value and high costs of imported essentials."
+            region: "Southeast Asia",
+            status: "Stable Food Price Environment",
+            bio: "Vietnam is a major agricultural producer and exporter in Southeast Asia, with strong domestic production of rice, seafood, coffee, fruits, and other food commodities. The January and February 2026 forecasts indicate a moderate food-inflation environment, with the predicted rate increasing slightly from 2.26% in January to 2.53% in February."
         },
         analysis: [
-            { label: "Macro Shock", value: "Monetary Instability", desc: "Extreme currency devaluation is the overarching driver of food price hyper-growth." },
-            { label: "Supply Condition", value: "Input Scarcity", desc: "Farmers struggle with the costs of seeds, fertilizer, and fuel, limiting domestic output." },
-            { label: "Market State", value: "Post-Peak Correction", desc: "The -5.4% change reflects a temporary stabilization after a period of extreme volatility." },
-            { label: "Risk Outlook", value: "Critical Alert", desc: "Persistent hyper-inflation makes basic nutrition unaffordable for the majority of the population." }
+            { label: "January Forecast", value: "2.26%", desc: "The model projects moderate food inflation in January 2026." },
+            { label: "February Forecast", value: "2.53%", desc: "The February 2026 forecast is slightly higher than the January projection." },
+            { label: "Monthly Change", value: "+0.27 pp", desc: "The predicted food-inflation rate increases by 0.27 percentage points from January to February." },
+            { label: "Risk Outlook", value: "Stable", desc: "The two-month forecast remains within a moderate range and does not indicate an extreme inflation signal." }
         ]
     }
 };
@@ -3716,7 +3777,7 @@ function showCountryDetail(name) {
     }
 
     // D. 警报状态切换（三角形感叹号）
-    const isWarn = data.level === 'warning';
+    const isWarn = data.level === 'warning' || data.level === 'critical';
     const statusCard = document.getElementById('det-status-card');
     
     // 定义莫兰迪颜色变量
@@ -3891,7 +3952,7 @@ function renderDetailCharts(data) {
     "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria",
     "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia",
     "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States",
-    "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe",
+    "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia",
     // 以下是2个观察员国
     "Holy See", "Palestine"
 ];
@@ -3910,7 +3971,7 @@ function renderDetailCharts(data) {
                     return `
                         <div style="padding:4px; line-height:1.5;">
                             <div style="font-weight:900; color:#FFEAC8; margin-bottom:2px; text-transform:uppercase;">${params.name}</div>
-                            <div style="font-size:12px; font-weight:bold;">Food Inflation: ${params.value}%</div>
+                            <div style="font-size:12px; font-weight:bold;">Feb 2026 Food Inflation: ${params.value}%</div>
                         </div>
                     `;
                 },
@@ -3928,7 +3989,7 @@ function renderDetailCharts(data) {
                 emphasis: { label: { show: false }, itemStyle: { areaColor: '#FFF7DA' ,borderColor: '#B8CAD6',borderWidth: 0.5,shadowBlur: 5,shadowColor: 'rgba(254, 243, 199, 0.5)'} },
                 select: { label: { show: false }, itemStyle: { areaColor: '#fef3c7' } },
                 data: dataNations.map(name => {
-                    let val = (inflationForecastData[name] ? inflationForecastData[name].oct : 0);
+                    let val = (inflationForecastData[name] ? inflationForecastData[name].feb : 0);
                     return { name: name, value: val };
                 })
             }]
@@ -4159,7 +4220,7 @@ function renderDetailCharts(data) {
  // 6. 全球风险动量流转 (桑基图) - 布局优化版
         const trendChart = echarts.init(document.getElementById('trendChart'));
 
-        const stats = { Stable: 64, Warning: 24, Crisis: 5 }; 
+        const stats = { Stable: 63, Warning: 27, Crisis: 3 }; 
 
         trendChart.setOption({
             tooltip: {
@@ -4186,7 +4247,7 @@ function renderDetailCharts(data) {
                     left: 'center',
                     bottom: 12, // 第二排位置
                     style: {
-                        text: 'regional origins and 2-month forecast risk states.',
+                        text: 'regional origins and February 2026 forecast risk states (Stable <5%, Warning 5–<15%, Crisis ≥15%).',
                         fill: '#94a3b8',
                         fontSize: 10,
                         fontWeight: 'bold',
@@ -4230,29 +4291,31 @@ function renderDetailCharts(data) {
                     }
                 ],
                 links: [
-        // Asia (总 25): 增加 Stable 占比
-                    { source: 'Asia', target: 'Stable', value: 13 },
-                    { source: 'Asia', target: 'Warning', value: 7 },
-                    { source: 'Asia', target: 'Crisis', value: 1 },
-                    
-                    // Africa (总 21): 保持高风险特征
-                    { source: 'Africa', target: 'Stable', value: 6 },
+                    // Asia (23 nations)
+                    { source: 'Asia', target: 'Stable', value: 15 },
+                    { source: 'Asia', target: 'Warning', value: 6 },
+                    { source: 'Asia', target: 'Crisis', value: 2 },
+
+                    // Africa (21 nations)
+                    { source: 'Africa', target: 'Stable', value: 9 },
                     { source: 'Africa', target: 'Warning', value: 11 },
-                    { source: 'Africa', target: 'Crisis', value: 4 },
-                    
-                    // Europe (总 20): 较稳定
-                    { source: 'Europe', target: 'Stable', value: 10 },
-                    { source: 'Europe', target: 'Warning', value: 5 },
-                    
-                    // North America (总 7): 极稳定
-                    { source: 'North America', target: 'Stable', value: 8 },
-                    { source: 'North America', target: 'Warning', value: 4 },
-                    // South America (总 18): 增加 Stable
-                    { source: 'South America', target: 'Stable', value: 7 },
-                    { source: 'South America', target: 'Crisis', value: 1 },
-                    
-                    // Oceania (总 1): 绝对稳定
-                    { source: 'Oceania', target: 'Stable', value: 4 }
+                    { source: 'Africa', target: 'Crisis', value: 1 },
+
+                    // Europe (25 nations)
+                    { source: 'Europe', target: 'Stable', value: 21 },
+                    { source: 'Europe', target: 'Warning', value: 4 },
+
+                    // North America (12 nations; includes Central America and Caribbean)
+                    { source: 'North America', target: 'Stable', value: 10 },
+                    { source: 'North America', target: 'Warning', value: 2 },
+
+                    // South America (8 nations)
+                    { source: 'South America', target: 'Stable', value: 5 },
+                    { source: 'South America', target: 'Warning', value: 3 },
+
+                    // Oceania (4 nations)
+                    { source: 'Oceania', target: 'Stable', value: 3 },
+                    { source: 'Oceania', target: 'Warning', value: 1 }
                 ],
                 label: {
                     position: 'right',
@@ -4312,5 +4375,65 @@ function renderDetailCharts(data) {
             }, 200);
         }
 </script>
+
+    <!-- Contact Us Modal -->
+    <div id="contact-modal" onclick="closeContactModal(event)">
+        <div class="contact-modal-card" onclick="event.stopPropagation()">
+            <button class="contact-close" onclick="closeContactModal()" aria-label="Close">&times;</button>
+
+            <div class="text-xs font-bold tracking-[0.22em] uppercase text-[#618AA1]">Get in touch with our research team</div>
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mt-2">Contact Us</h2>
+            <p class="text-sm text-slate-500 mt-2">For research inquiries, collaboration, and correspondence.</p>
+
+            <div class="contact-grid">
+                <div class="contact-person-card">
+                    <div class="text-xl font-bold text-slate-800">陈晨 <span class="text-base font-semibold text-slate-500">(Chen Chen)</span></div>
+                    <div class="mt-4 text-xs font-bold uppercase tracking-wider text-slate-400">Email</div>
+                    <a class="contact-email block mt-1" href="mailto:xjuchenchen@xju.edu.cn">xjuchenchen@xju.edu.cn</a>
+                    <div class="mt-4 text-sm leading-6 text-slate-600">College of Software, Xinjiang University, China</div>
+                </div>
+
+                <div class="contact-person-card">
+                    <div class="text-xl font-bold text-slate-800">吕小毅 <span class="text-base font-semibold text-slate-500">(Xiaoyi Lv)</span></div>
+                    <div class="mt-4 text-xs font-bold uppercase tracking-wider text-slate-400">Email</div>
+                    <a class="contact-email block mt-1" href="mailto:xjuwawj01@163.com">xjuwawj01@163.com</a>
+                    <div class="mt-4 text-sm leading-6 text-slate-600">College of Software, Xinjiang University, Urumqi 830046, China</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function openContactModal() {
+            const modal = document.getElementById('contact-modal');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeContactModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('contact-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('contact-modal');
+                if (modal) modal.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const candidates = Array.from(document.querySelectorAll('button, a, div'));
+            const contactButton = candidates.find(el =>
+                el.textContent.trim().toUpperCase() === 'CONTACT US'
+            );
+            if (contactButton && !contactButton.getAttribute('onclick')) {
+                contactButton.style.cursor = 'pointer';
+                contactButton.addEventListener('click', openContactModal);
+            }
+        });
+    </script>
+
 </body>
 </html>
